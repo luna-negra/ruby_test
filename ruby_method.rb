@@ -45,3 +45,11 @@ a = 1
   a *= 2
   puts a
 }
+
+# return value
+def last_line(num)
+    num ** 2
+end
+
+puts "----"
+puts last_line(10)

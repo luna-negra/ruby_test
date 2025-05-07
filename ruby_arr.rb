@@ -67,6 +67,28 @@ puts "#{arr}"
 
 puts ("========")
 
+arr = [1, 2, 3, 4]
+tmp = arr.collect do |n|
+  n * 2
+end
+
+puts "#{arr}"
+puts "#{tmp}"
+
+tmp2 = tmp.map do |n|
+  n * 2
+end
+
+puts "#{tmp2}"
+
+# select
+tmp3 = arr.select do |n| 
+  n % 2 == 0
+end
+
+puts "#{tmp3}"   # [2, 4]
+
+puts ("========")
 # Convert 2D array in Hash
 array = [["name", "Alex"], ["age", 30], ["nation", "USA"]]
 hash = Hash[array]

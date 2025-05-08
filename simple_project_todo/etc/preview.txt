@@ -1,0 +1,29 @@
+## This is a simple test project to learn how to use Ruby.
+
+## assume that this program will be used for only one user.
+## do not encrypt data in this project.
+
+# with logger.
+# start - check the version
+  # signin - check the member in userfile
+  # signup - store the first user in userfile.
+    # if failed. stay
+# menu
+  # print out today's todo
+  # 1. create new
+    #  add name of todo
+    #  add deadline
+    #  add urgency
+  # 2. update
+    # find the name of todo
+    # submenu
+      # 1. update name
+      # 2. update deadline
+      # 3. update urgency
+      # 4. cancel
+  # 3. delete
+    # input the number of todo
+  # 4. settings
+    # change password
+  # 5. signout 
+

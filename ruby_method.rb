@@ -53,16 +53,3 @@ end
 
 puts "----"
 puts last_line(10)
-
-
-# lambda function
-lamb_func = lambda do |arr|
-  arr.collect { |n| n * 2}
-end
-
-arr = [1, 2, 3, 4]
-def multiple_2(array, lamb)
-   lamb.call(array)
-end
-
-puts "#{multiple_2(arr, lamb_func)}"

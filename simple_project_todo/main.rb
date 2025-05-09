@@ -54,8 +54,12 @@ class ToDo
     end
 
     def prompt_signout
-        print " * Do you want to sign out? [y/N]: "
-        gets.chomp.downcase == "y"
+        begin
+            print " * Do you want to sign out? [y/N]: "
+            gets.chomp.downcase == "y"
+        
+        rescue Interrupt => e
+        end
     end
 
     def todo_create
@@ -75,40 +79,43 @@ class ToDo
         flag = false
         type = "index"
 
-        todo_show
-        print " * Select the number or name of your to do to delete: "
-        select = gets.chomp
-        text = "[Warning] There is no To do with #{type} '#{select}'"
+        begin
+            todo_show
+            print " * Select the number or name of your to do to delete: "
+            select = gets.chomp
+            text = "[Warning] There is no To do with #{type} '#{select}'"
 
-        if select.to_i == 0
-            type = "name"
-            for todo in d
-                idx = d.index(todo)
-                if todo["name"] == select
+            if select.to_i == 0
+                type = "name"
+                for todo in d
+                    idx = d.index(todo)
+                    if todo["name"] == select
+                        flag = true
+                        d.delete_at(idx)
+                        break
+                    end 
+                end    
+            else
+                select = select.to_i - 1
+                if select < d.length
                     flag = true
-                    d.delete_at(idx)
-                    break
-                end 
-            end    
-        else
-            select = select.to_i - 1
-            if select < d.length
-                flag = true
-                d.delete_at(select)
+                    d.delete_at(select)
+                end
             end
-        end
 
-        if flag 
-            text = " !! Successfully Delete To Do with #{type} '#{select}'" 
-            @config_file["member"][$LOGIN_USER]["todo_list"] = d
-            File.open($CONFIG_PATH, "w") do |file|
-                file.write(YAML.dump(@config_file))
+            if flag 
+                text = " !! Successfully Delete To Do with #{type} '#{select}'" 
+                @config_file["member"][$LOGIN_USER]["todo_list"] = d
+                File.open($CONFIG_PATH, "w") do |file|
+                    file.write(YAML.dump(@config_file))
+                end
             end
+
+            puts text
+            puts " == "
+
+        rescue Interrupt => e
         end
-
-        puts text
-        puts " == "
-
     end
 
     def todo_show
@@ -132,12 +139,12 @@ class ToDo
         type = "index"
         select_todo = nil
 
-        todo_show
-        print " * Select the number or name of your to do to update: "
-        select = gets.chomp
-        text = "[Warning] There is no To do with #{type} '#{select}'"
-
         begin
+            todo_show
+            print " * Select the number or name of your to do to update: "
+            select = gets.chomp
+            text = "[Warning] There is no To do with #{type} '#{select}'"
+
             if select.to_i == 0
                 type = "name"
                 for todo in d
@@ -186,19 +193,20 @@ class ToDo
                     end
                 end
             end
+
+            if flag 
+                text = " !! Successfully Update To Do with #{type} '#{select}'" 
+                @config_file["member"][$LOGIN_USER]["todo_list"] = d
+                File.open($CONFIG_PATH, "w") do |file|
+                    file.write(YAML.dump(@config_file))
+                end
+            end
+
+            puts text
+            puts " == "
+        
         rescue Interrupt => e
         end
-
-        if flag 
-            text = " !! Successfully Update To Do with #{type} '#{select}'" 
-            @config_file["member"][$LOGIN_USER]["todo_list"] = d
-            File.open($CONFIG_PATH, "w") do |file|
-                file.write(YAML.dump(@config_file))
-            end
-        end
-
-        puts text
-        puts " == "
     end
 
 
@@ -396,7 +404,15 @@ rescue Interrupt
 else
     # Main
     while true
-        main_number = td.main
+        begin
+            main_number = td.main
+
+        rescue Interrupt => e
+            puts ""
+            puts ""
+            break if td.prompt_signout
+        end
+
         case main_number
         when 1
             td.todo_show

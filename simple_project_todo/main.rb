@@ -275,9 +275,6 @@ class ToDo
         }
 
         while true
-            #print " * Password: "
-            #password = gets.chomp
-
             password = STDIN.getpass(" * Password: ")
 
             flag = true
